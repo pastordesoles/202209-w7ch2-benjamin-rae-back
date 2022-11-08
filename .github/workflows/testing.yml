@@ -19,4 +19,4 @@ jobs:
         env:
           DEBUG: ${{ secrets.DEBUG }}
           MONGODB_URL: ${{ secrets.MONGODB_URL }}
-          TOKEN: ${{secrets.TOKEN}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
