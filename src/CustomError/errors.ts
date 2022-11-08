@@ -6,6 +6,11 @@ const errors = {
     401,
     "Invalid username or password"
   ),
+  passwordError: new CustomError(
+    "Invalid password",
+    401,
+    "Invalid username or password"
+  ),
 };
 
 export default errors;

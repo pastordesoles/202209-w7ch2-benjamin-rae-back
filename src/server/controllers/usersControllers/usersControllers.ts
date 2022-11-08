@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import CustomError from "../../../CustomError/CustomError.js";
+import bcrypt from "bcryptjs";
 import errors from "../../../CustomError/errors.js";
 import User from "../../../database/models/User.js";
 import environment from "../../loadEnvironment.js";
@@ -18,12 +18,19 @@ export const loginUser = async (
     const user = await User.findOne({ username });
 
     if (!user) {
-      next(errors.usernameError);
-      return;
+      throw errors.usernameError;
     }
 
-    const token = jwt.sign({}, jwtSecret);
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw errors.passwordError;
+    }
+
+    const token = jwt.sign({ username, id: user._id }, jwtSecret, {
+      expiresIn: "2d",
+    });
 
     res.status(200).json({ token });
-  } catch {}
+  } catch (error: unknown) {
+    next(error);
+  }
 };
