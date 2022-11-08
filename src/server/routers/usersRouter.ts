@@ -7,6 +7,6 @@ const { loginUser: loginUserRoute } = routes;
 // eslint-disable-next-line new-cap
 const usersRouter = express.Router();
 
-usersRouter.get(loginUserRoute, loginUser);
+usersRouter.post(loginUserRoute, loginUser);
 
 export default usersRouter;
