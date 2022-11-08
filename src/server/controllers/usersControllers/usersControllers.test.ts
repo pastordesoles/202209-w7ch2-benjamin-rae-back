@@ -1,7 +1,9 @@
 import "../../loadEnvironment.js";
 import { loginUser } from "./usersControllers";
-import type { Response } from "express";
+import type { Response, NextFunction, Request } from "express";
 import jwt from "jsonwebtoken";
+import User from "../../../database/models/User.js";
+import errors from "../../../CustomError/errors.js";
 
 const secret = process.env.JWT_SECRET;
 
@@ -12,15 +14,23 @@ const res: Partial<Response> = {
   json: jest.fn(),
 };
 
+const next = jest.fn();
+
+const req: Partial<Request> = {
+  body: {
+    username: "testname",
+    password: "testpass",
+  },
+};
+
 describe("Given a loginUser controller", () => {
-  describe("When it receives a response object", () => {
-    test("Then it should invoke the method status with 200 and json with a token", () => {
-      const expectedStatus = 200;
+  describe("When it receives a request with an unknown username, a response object and next function", () => {
+    test("Then it should invoke the function next an error a username error", async () => {
+      User.findOne = jest.fn().mockReturnValueOnce(null);
 
-      loginUser(null, res as Response);
+      await loginUser(req as Request, res as Response, next as NextFunction);
 
-      expect(res.status).toHaveBeenCalledWith(expectedStatus);
-      expect(res.json).toHaveBeenCalledWith({ token });
+      expect(next).toHaveBeenCalledWith(errors.usernameError);
     });
   });
 });
