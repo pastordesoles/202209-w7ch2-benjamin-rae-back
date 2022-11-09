@@ -115,7 +115,7 @@ describe(" Given a deleteRobotById a controllers", () => {
         },
       };
 
-      req.header = jest.fn().mockReturnValue(`Bearer: ${authenticationToken}`);
+      req.header = jest.fn().mockReturnValue(`Bearer ${authenticationToken}`);
 
       Robot.findByIdAndDelete = jest.fn().mockReturnValue(robot);
 
@@ -148,7 +148,7 @@ describe(" Given a deleteRobotById a controllers", () => {
         },
       };
 
-      req.header = jest.fn().mockReturnValue(`Bearer: mariomiracomotesteoo`);
+      req.header = jest.fn().mockReturnValue(`Bearer mariomiracomotesteoo`);
 
       Robot.findByIdAndDelete = jest.fn().mockReturnValue(robot);
 
@@ -171,7 +171,7 @@ describe(" Given a deleteRobotById a controllers", () => {
         },
       };
 
-      req.header = jest.fn().mockReturnValue(`Bearer: ${authenticationToken}`);
+      req.header = jest.fn().mockReturnValue(`Bearer ${authenticationToken}`);
 
       await deleteRobotById(
         req as Request,
@@ -209,7 +209,7 @@ describe("Given a editRobotById a controller", () => {
     test("Then its should call method status with 200", async () => {
       const status = 200;
 
-      req.header = jest.fn().mockReturnValue(`Bearer: ${authenticationToken}`);
+      req.header = jest.fn().mockReturnValue(`Bearer ${authenticationToken}`);
 
       Robot.findByIdAndUpdate = jest.fn().mockReturnValue(robot);
 
@@ -222,7 +222,7 @@ describe("Given a editRobotById a controller", () => {
     describe("when it receives token 'bengracias' ", () => {
       test("Then it should call next", async () => {
         req.query.token = "bengracias";
-        req.header = jest.fn().mockReturnValue(`Bearer: bengracias`);
+        req.header = jest.fn().mockReturnValue(`Bearer bengracias`);
 
         await editRobotById(req as Request, res as Response, next);
 
@@ -234,9 +234,7 @@ describe("Given a editRobotById a controller", () => {
       test("Then it should call next", async () => {
         req.params.idRobot = "vhsgd";
 
-        req.header = jest
-          .fn()
-          .mockReturnValue(`Bearer: ${authenticationToken}`);
+        req.header = jest.fn().mockReturnValue(`Bearer ${authenticationToken}`);
 
         await editRobotById(req as Request, res as Response, next);
 

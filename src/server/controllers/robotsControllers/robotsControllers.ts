@@ -70,7 +70,7 @@ export const deleteRobotById = async (
     );
   }
 
-  const token = authHeader.replace(/^Bearer:\s*/, "");
+  const token = authHeader.replace(/^Bearer\s*/, "");
 
   if (!token) {
     throw new CustomError(
@@ -128,7 +128,7 @@ export const editRobotById = async (
     );
   }
 
-  const token = authHeader.replace(/^Bearer:\s*/, "");
+  const token = authHeader.replace(/^Bearer\s*/, "");
 
   if (!token) {
     throw new CustomError(
