@@ -6,6 +6,7 @@ const routes = {
   editRobotRouterById: "/robot/:idRobot",
   users: "/users",
   loginUser: "/login",
+  registerUser: "/register",
 };
 
 export default routes;

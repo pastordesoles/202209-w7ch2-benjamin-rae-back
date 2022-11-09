@@ -1,15 +1,16 @@
 import jwt from "jsonwebtoken";
 import type { Response, NextFunction, Request } from "express";
 import bcrypt from "bcryptjs";
-import { loginUser } from "./usersControllers";
+import { loginUser, registerUser } from "./usersControllers";
 import User from "../../../database/models/User.js";
 import errors from "../../../CustomError/errors.js";
-import type { LoginBody } from "./types.js";
+import type { LoginBody, RegisterBody } from "./types.js";
 import environment from "../../loadEnvironment.js";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
+
 const { jwtSecret } = environment;
 
 const token = jwt.sign({}, jwtSecret);
@@ -64,6 +65,50 @@ describe("Given a loginUser controller", () => {
 
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
       expect(res.json).toHaveBeenCalledWith({ token });
+    });
+  });
+});
+
+describe("Given a registerUser controller", () => {
+  const registerBody: RegisterBody = {
+    username: "testname",
+    password: "testpass",
+    email: "test@email.com",
+  };
+
+  const req: Partial<Request> = {
+    body: registerBody,
+  };
+
+  describe("When it receives a request with a username, password and email in the body", () => {
+    test("Then it should invoke the response method status with 201 and json with the new user's username, email and id", async () => {
+      const userId = "testid";
+      const expectedStatus = 201;
+      User.create = jest
+        .fn()
+        .mockResolvedValueOnce({ ...registerBody, _id: userId });
+      bcrypt.hash = jest.fn().mockResolvedValueOnce("testpass");
+
+      await registerUser(req as Request, res as Response, next);
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+      expect(res.json).toHaveBeenCalledWith({
+        user: {
+          username: registerBody.username,
+          email: registerBody.email,
+          id: userId,
+        },
+      });
+    });
+  });
+
+  describe("When it receives an already registered user in the request body", () => {
+    test("Then it should call next with a create user error with message 'Can't create user' and status 500", async () => {
+      User.findOne = jest.fn().mockRejectedValueOnce(new Error());
+
+      await registerUser(req as Request, res as Response, next);
+
+      expect(next).toHaveBeenCalledWith(errors.createUserError);
     });
   });
 });
