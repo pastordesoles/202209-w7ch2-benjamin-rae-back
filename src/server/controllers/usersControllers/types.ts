@@ -8,3 +8,7 @@ export interface UserStructure {
   password: string;
   id: string;
 }
+
+export interface RegisterBody extends LoginBody {
+  email: string;
+}

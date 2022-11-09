@@ -11,6 +11,11 @@ const errors = {
     401,
     "Invalid username or password"
   ),
+  createUserError: new CustomError(
+    "Can't create user",
+    500,
+    "Couldn't create a new user"
+  ),
 };
 
 export default errors;
